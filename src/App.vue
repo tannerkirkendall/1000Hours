@@ -21,9 +21,9 @@
 
       <div v-if="!currentUser" class="navbar-nav ml-auto">
         <li class="nav-item">
-          <router-link to="/register" class="nav-link">
+          <!-- <router-link to="/register" class="nav-link">
             <font-awesome-icon icon="user-plus" /> Sign Up
-          </router-link>
+          </router-link> -->
         </li>
         <li class="nav-item">
           <router-link to="/login" class="nav-link">

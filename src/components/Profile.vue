@@ -29,10 +29,12 @@ export default {
   name: 'Profile',
   computed: {
     currentUser() {
+      console.log('before current user')
       return this.$store.state.auth.user;
     }
   },
-  mounted() {
+  beforeCreate() {
+    console.log('before mounted;')
     if (!this.currentUser) {
       this.$router.push('/login');
     }
