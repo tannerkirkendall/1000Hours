@@ -10,21 +10,18 @@
       {{currentUser.accessToken.substring(0, 20)}} ... {{currentUser.accessToken.substr(currentUser.accessToken.length - 20)}}
     </p>
     <p>
-      <strong>Id:</strong>
-      {{currentUser.userId}}
+      <strong>Payload:</strong>
+      {{activities}}
     </p>
-    <p>
-      <strong>Email:</strong>
-      {{products}}
-    </p>
-    <strong>Authorities:</strong>
+
+    <strong>Activities:</strong>
     <ul>
-      <li v-for="a in act" :key="a">{{a._id}}, {{a.startTime}}, {{a.endTime}}</li>
+      <li v-for="a in activities" :key="a">{{a._id}}, {{a.startTime}}, {{a.endTime}}, {{a.min}}</li>
     </ul>
 
-    <strong>Authorities2:</strong>
+        <strong>Activities:</strong>
     <ul>
-      <li v-for="a in products" :key="a">{{a._id}}, {{a.stateDate}}</li>
+      {{totals}}
     </ul>
   </div>
 </template>
@@ -39,11 +36,9 @@ export default {
       console.log('before current user')
       return this.$store.state.auth.user;
     },
-    act() {
-      return this.$store.state.activity.activities;
-    },
     ...mapGetters('activity', {
-      products: 'all'
+      activities: 'all',
+      totals: 'totalMinutes' 
     })
   },
   mounted() {
@@ -51,8 +46,11 @@ export default {
     if (!this.currentUser) {
       this.$router.push('/login');
     }
-    this.$store.dispatch("activity/getActivities");
+    
 
+  },
+  created() {
+    this.$store.dispatch("activity/init");
   }
 };
 </script>

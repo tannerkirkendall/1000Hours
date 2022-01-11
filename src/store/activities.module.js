@@ -1,4 +1,6 @@
 import DataService from '../services/data.service';
+import { differenceInMinutes, parseISO, format } from 'date-fns'
+
 const initialState = {
     activities: []
 }
@@ -7,7 +9,7 @@ export const activity = {
     namespaced: true,
     state: initialState,
     actions: {
-        getActivities({commit}){
+        init({commit}){
             return DataService.getActivities().then(
                 ret => {
                     commit('getActivities', ret)
@@ -23,7 +25,23 @@ export const activity = {
     },
     getters: {
         all: (state) => {
-            return state.activities;
+            return state.activities.map(x => {
+                return {
+                    _id: x._id,
+                    startTime: format(parseISO(x.startTime), "MM/dd/yyyy' 'hh:mmaaa"),
+                    endTime: x.endTime == null ? "": format(parseISO(x.endTime), "MM/dd/yyyy' 'hh:mmaaa"),
+                    min: differenceInMinutes(parseISO(x.endTime), parseISO(x.startTime))
+                      
+                }
+            })
+        },
+
+        totalMinutes: (state, getters) => {
+            var totalMin = 0;
+            getters.all.forEach((x) => {
+                totalMin += x.min > 0 ? parseInt(x.min) : 0
+            });
+            return totalMin;
         }
     }
 };

@@ -35,8 +35,6 @@ class DataService {
   getActivities(){
     return axios.get(API_URL + 'activities', { headers: authHeader() });
   }
-
-
 }
 
 export default new DataService();
