@@ -1,11 +1,12 @@
 import axios from 'axios';
+import authHeader from './auth-header';
 
-const API_URL = 'http://localhost:3001/api/auth/';
+const API_URL = 'http://localhost:3001/api/';
 
-class AuthService {
+class DataService {
   login(user) {
     return axios
-      .post(API_URL + 'login', {
+      .post(API_URL + 'auth/login', {
         email: user.email,
         password: user.password
       })
@@ -23,13 +24,19 @@ class AuthService {
   }
 
   register(user) {
-    return axios.post(API_URL + 'register', {
+    return axios.post(API_URL + 'auth/register', {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
       password: user.password
     });
   }
+
+  getActivities(){
+    return axios.get(API_URL + 'activities', { headers: authHeader() });
+  }
+
+
 }
 
-export default new AuthService();
+export default new DataService();

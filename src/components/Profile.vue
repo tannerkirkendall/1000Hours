@@ -11,33 +11,48 @@
     </p>
     <p>
       <strong>Id:</strong>
-      {{currentUser.id}}
+      {{currentUser.userId}}
     </p>
     <p>
       <strong>Email:</strong>
-      {{currentUser.email}}
+      {{products}}
     </p>
     <strong>Authorities:</strong>
     <ul>
-      <li v-for="role in currentUser.roles" :key="role">{{role}}</li>
+      <li v-for="a in act" :key="a">{{a._id}}, {{a.startTime}}, {{a.endTime}}</li>
+    </ul>
+
+    <strong>Authorities2:</strong>
+    <ul>
+      <li v-for="a in products" :key="a">{{a._id}}, {{a.stateDate}}</li>
     </ul>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'Profile',
   computed: {
     currentUser() {
       console.log('before current user')
       return this.$store.state.auth.user;
-    }
+    },
+    act() {
+      return this.$store.state.activity.activities;
+    },
+    ...mapGetters('activity', {
+      products: 'all'
+    })
   },
-  beforeCreate() {
+  mounted() {
     console.log('before mounted;')
     if (!this.currentUser) {
       this.$router.push('/login');
     }
+    this.$store.dispatch("activity/getActivities");
+
   }
 };
 </script>

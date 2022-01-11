@@ -1,4 +1,4 @@
-import AuthService from '../services/auth.service';
+import DataService from '../services/data.service';
 
 const user = JSON.parse(localStorage.getItem('user'));
 const initialState = user
@@ -10,7 +10,7 @@ export const auth = {
   state: initialState,
   actions: {
     login({ commit }, user) {
-      return AuthService.login(user).then(
+      return DataService.login(user).then(
         user => {
           commit('loginSuccess', user);
           return Promise.resolve(user);
@@ -22,11 +22,11 @@ export const auth = {
       );
     },
     logout({ commit }) {
-      AuthService.logout();
+      DataService.logout();
       commit('logout');
     },
     register({ commit }, user) {
-      return AuthService.register(user).then(
+      return DataService.register(user).then(
         response => {
           commit('registerSuccess');
           return Promise.resolve(response.data);
