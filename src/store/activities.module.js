@@ -1,5 +1,5 @@
 import DataService from '../services/data.service';
-import { differenceInMinutes, parseISO, format } from 'date-fns'
+import { parseISO, format } from 'date-fns'
 
 const initialState = {
     activities: []
@@ -20,7 +20,7 @@ export const activity = {
     },
     mutations: {
         getActivities(state, ret){
-            state.activities = ret.data.activties;
+            state.activities = ret.data;
         }
     },
     getters: {
@@ -30,8 +30,9 @@ export const activity = {
                     _id: x._id,
                     startTime: format(parseISO(x.startTime), "MM/dd/yyyy' 'hh:mmaaa"),
                     endTime: x.endTime == null ? "": format(parseISO(x.endTime), "MM/dd/yyyy' 'hh:mmaaa"),
-                    min: differenceInMinutes(parseISO(x.endTime), parseISO(x.startTime))
-                      
+                    totalElapsedMinutes: x.totalElapsedMinutes,
+                    elapsedHours: x.elapsedHours,
+                    elapsedMinutes: x.elapsedMinutes     
                 }
             })
         },
@@ -39,9 +40,10 @@ export const activity = {
         totalMinutes: (state, getters) => {
             var totalMin = 0;
             getters.all.forEach((x) => {
-                totalMin += x.min > 0 ? parseInt(x.min) : 0
+                totalMin += x.totalElapsedMinutes > 0 ? parseInt(x.totalElapsedMinutes) : 0
             });
-            return totalMin;
+            return totalMin
+            
         }
     }
 };
