@@ -1,10 +1,11 @@
 import axios from 'axios';
 import authHeader from './auth-header';
 
-const API_URL = 'http://localhost:3001/api/';
+const API_URL = process.env.VUE_APP_API_HOST;
 
 class DataService {
   login(user) {
+    console.log(process.env.VUE_APP_API_HOST);
     return axios
       .post(API_URL + 'auth/login', {
         email: user.email,

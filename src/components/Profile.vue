@@ -19,7 +19,7 @@
       <li v-for="a in activities" :key="a">{{a._id}}, {{a.startTime}}, {{a.endTime}}, {{a.elapsedHours}}:{{a.elapsedMinutes}}</li>
     </ul>
 
-        <strong>Activities:</strong>
+    <strong>Total Time:</strong>
     <ul>
       {{totals}}
     </ul>
