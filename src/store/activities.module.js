@@ -1,8 +1,18 @@
 import DataService from '../services/data.service';
 import { parseISO, format } from 'date-fns'
 
+
 const initialState = {
     activities: []
+}
+
+function padTime(data){
+    // console.log("padTime", data)
+    // console.log("padTime", data.length)
+    if (data != null && data < 9 ){
+        return "0" + data;
+    }
+    else return data;
 }
 
 export const activity = {
@@ -33,7 +43,7 @@ export const activity = {
                     totalElapsedMinutes: x.totalElapsedMinutes,
                     elapsedHours: x.elapsedHours,
                     elapsedMinutes: x.elapsedMinutes,
-                    elapsedFormat: x.elapsedHours + ":" + x.elapsedMinutes
+                    elapsedFormat: x.endTime == null ? "": padTime(x.elapsedHours)+ ":" + padTime(x.elapsedMinutes)
                 }
             })
         },

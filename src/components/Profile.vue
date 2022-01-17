@@ -32,12 +32,7 @@
   :scroll="{ y: 300 }"
   selected-key="_id"
 >
-  <template #th-dessert>
-    Dessert
-    <ui-icon v-tooltip="'100g serving'" aria-describedby="th-cell-1">
-      error_outline
-    </ui-icon>
-  </template>
+
   <template #dessert="{ data }">
     <div class="dessert">{{ data.dessert }}</div>
   </template>
@@ -64,7 +59,6 @@ export default {
       data: this.activities,
       thead: [
         'StartTime',
-        // 'EndTime',
         'HH:MM',
         'Actions',
       ],
@@ -72,9 +66,6 @@ export default {
         {
           field: 'startTime'
         },
-        // {
-        //   field: 'endTime'
-        // },
         {
           field: 'elapsedFormat'
         },
