@@ -5,7 +5,7 @@
         <strong>{{currentUser.firstName}}'s</strong> Profile
       </h3>
     </header>
-    <p>
+    <!-- <p>
       <strong>Token:</strong>
       {{currentUser.accessToken.substring(0, 20)}} ... {{currentUser.accessToken.substr(currentUser.accessToken.length - 20)}}
     </p>
@@ -22,7 +22,35 @@
     <strong>Total Time:</strong>
     <ul>
       {{totals}}
-    </ul>
+    </ul> -->
+
+<ui-table
+  :data="activities"
+  fullwidth
+  :thead="thead"
+  :tbody="tbody"
+  :scroll="{ y: 300 }"
+  selected-key="_id"
+>
+  <template #th-dessert>
+    Dessert
+    <ui-icon v-tooltip="'100g serving'" aria-describedby="th-cell-1">
+      error_outline
+    </ui-icon>
+  </template>
+  <template #dessert="{ data }">
+    <div class="dessert">{{ data.dessert }}</div>
+  </template>
+  <template #actions="{ data }">
+    <!-- <ui-icon @click="show(data)">description</ui-icon> -->
+    <ui-icon @click="show(data)">edit</ui-icon>
+    <!-- <ui-icon @click="show(data)">delete</ui-icon> -->
+  </template>
+
+</ui-table>
+
+
+
   </div>
 </template>
 
@@ -31,6 +59,38 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'Profile',
+  data() {
+    return {
+      data: this.activities,
+      thead: [
+        'StartTime',
+        // 'EndTime',
+        'HH:MM',
+        'Actions',
+      ],
+      tbody: [
+        {
+          field: 'startTime'
+        },
+        // {
+        //   field: 'endTime'
+        // },
+        {
+          field: 'elapsedFormat'
+        },
+        {
+          slot: 'actions'
+        }
+      ]
+    };
+  },
+
+  methods:{
+    show(data){
+      console.log(data);
+    }
+  },
+  
   computed: {
     currentUser() {
       console.log('before current user')
@@ -46,11 +106,12 @@ export default {
     if (!this.currentUser) {
       this.$router.push('/login');
     }
-    
-
   },
   created() {
     this.$store.dispatch("activity/init");
   }
 };
 </script>
+<style scoped>
+
+</style>

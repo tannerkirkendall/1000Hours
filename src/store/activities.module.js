@@ -32,7 +32,8 @@ export const activity = {
                     endTime: x.endTime == null ? "": format(parseISO(x.endTime), "MM/dd/yyyy' 'hh:mmaaa"),
                     totalElapsedMinutes: x.totalElapsedMinutes,
                     elapsedHours: x.elapsedHours,
-                    elapsedMinutes: x.elapsedMinutes     
+                    elapsedMinutes: x.elapsedMinutes,
+                    elapsedFormat: x.elapsedHours + ":" + x.elapsedMinutes
                 }
             })
         },

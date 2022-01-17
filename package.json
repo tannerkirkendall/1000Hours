@@ -14,18 +14,19 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/vue-fontawesome": "^3.0.0-5",
     "axios": "^0.24.0",
+    "balm-ui": "^9.40.0",
     "bootstrap": "^4.6.1",
     "core-js": "^3.6.5",
     "date-fns": "^2.28.0",
+    "express": "^4.17.2",
     "jquery": "^3.6.0",
     "popper.js": "^1.16.1",
+    "serve-static": "^1.14.2",
     "vee-validate": "^4.5.7",
     "vue": "^3.0.0",
     "vue-router": "^4.0.12",
     "vuex": "^4.0.2",
-    "yup": "^0.32.11",
-    "express": "^4.17.2",
-    "serve-static": "^1.14.2"
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
@@ -34,7 +35,7 @@
     "@vue/compiler-sfc": "^3.0.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^7.0.0"    
+    "eslint-plugin-vue": "^7.0.0"
   },
   "eslintConfig": {
     "root": true,
