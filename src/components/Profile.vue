@@ -25,49 +25,59 @@
     </ul> -->
 
 
-<ui-dialog v-model="open" fullscreen>
-  <ui-dialog-title>Full-Screen Dialog Title</ui-dialog-title>
-  <ui-dialog-content>
-    {{popupData}}
-    <ui-datepicker
-      v-model="date"
-      :config="config"
-      placeholder="Select Datetime.."
-      toggle
-      clear
+    <ui-dialog v-model="open" fullscreen>
+      <ui-dialog-title>Edit Activity</ui-dialog-title>
+      <ui-dialog-content>
+        <!-- {{popupData}} -->
+
+        <ui-datepicker
+          v-model="datePickerStart"
+          :config="config"
+          placeholder="Select Datetime.."
+        >
+        </ui-datepicker>
+
+        <ui-datepicker
+          v-model="datePickerEnd"
+          :config="config"
+          placeholder="Select Datetime.."
+        >
+        </ui-datepicker>
+
+      </ui-dialog-content>
+      <ui-dialog-actions>
+        <ui-button @click="open = false">OK</ui-button>
+      </ui-dialog-actions>
+    </ui-dialog>
+
+    <ui-table
+      :data="activities"
+      showProgress
+      fullwidth
+      :thead="thead"
+      :tbody="tbody"
+      :scroll="{ y: 300 }"
+      selected-key="_id"
     >
-      <template #toggle>
-        <i class="fa fa-calendar"></i>
+      <template #dessert="{ data }">
+        <div class="dessert">{{ data }}</div>
       </template>
-      <template #clear>
-        <i class="fa fa-close"></i>
+      <template #actions="{ data }">
+        <ui-icon @click="show(data)">edit</ui-icon>
       </template>
-    </ui-datepicker>
+    </ui-table>
     
-  </ui-dialog-content>
-  <ui-dialog-actions>
-    <ui-button @click="open = false">OK</ui-button>
-  </ui-dialog-actions>
-</ui-dialog>
+    <ui-fab class="circle-div-rec">
+      <template #default="{ iconClass }">
+        <ui-icon :class="iconClass">pause</ui-icon>
+      </template>
+    </ui-fab>
 
-<ui-table
-  :data="activities"
-  showProgress
-  fullwidth
-  :thead="thead"
-  :tbody="tbody"
-  :scroll="{ y: 300 }"
-  selected-key="_id"
->
-  <template #dessert="{ data }">
-    <div class="dessert">{{ data }}</div>
-  </template>
-  <template #actions="{ data }">
-    <ui-icon @click="show(data)">edit</ui-icon>
-  </template>
-</ui-table>
-
-
+    <ui-fab class="circle-div-add">
+      <template #default="{ iconClass }">
+        <ui-icon :class="iconClass" @click="newTime()">add</ui-icon>
+      </template>
+    </ui-fab>
 
   </div>
 </template>
@@ -86,7 +96,8 @@ export default {
         enableTime: true,
         dateFormat: 'm/d/Y h:i K'
       },
-      date: '',
+      datePickerStart: '',
+      datePickerEnd: '',
       thead: [
         'StartTime',
         'HH:MM',
@@ -113,7 +124,12 @@ export default {
     show(data){
       console.log(data);
       this.popupData = data;
-      this.date = data.startTime;
+      this.datePickerStart = data.startTime;
+      this.datePickerEnd = data.endTime;
+      this.open = true;
+    },
+
+    newTime(){
       this.open = true;
     }
   },
@@ -138,5 +154,19 @@ export default {
 };
 </script>
 <style scoped>
+.circle-div-add {
+    /* background-color: #314963; */
 
+    position: fixed;
+    bottom: 21px;
+    right: 25px;
+}
+
+.circle-div-rec {
+    background-color: #ad000e;
+
+    position: fixed;
+    bottom: 21px;
+    right: 100px;
+}
 </style>
