@@ -132,6 +132,11 @@ export default {
 
     closeEditTime(data){
       console.log("close", data);
+      var d = {
+        startTime: new Date(this.editStartTime)
+      };
+      console.log("payload", d);
+      this.postNewActivity(d);
       this.editStartTime = '';
       this.editEndTime = '';
       this.openEdit = false;
@@ -141,7 +146,23 @@ export default {
       this.editStartTime = format(Date.now(), "MM/dd/yyyy' 'h:mm a");
       this.editEndTime = '';
       this.openEdit = true;
-    }
+    },
+    
+    postNewActivity(d) {
+      console.log("1")
+      this.$store.dispatch("activity/postActivity", d).then(
+        (error) => {
+          this.loading = false;
+          this.message =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+        }
+      );
+    },
+
   },
   
   computed: {

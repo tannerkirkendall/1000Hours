@@ -23,11 +23,22 @@ export const activity = {
                     return Promise.resolve(ret);
                 }
             )
+        },
+        postActivity({ commit }, data){
+            return DataService.postActivity(data).then(
+                ret => {
+                    commit('updateActivity', ret)
+                    return Promise.resolve(ret);
+                }
+            )
         }
     },
     mutations: {
         getActivities(state, ret){
             state.activities = ret.data;
+        },
+        updateActivity(state, ret){
+            console.log(ret);
         }
     },
     getters: {
