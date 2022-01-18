@@ -101,7 +101,11 @@ export default {
         dateFormat: 'm/d/Y h:i K'
       },
       thead: [
-        'StartTime',
+        {
+          value: 'StartTime',
+          sort: 'desc',
+          columnId: 'startTime'
+        },
         'HH:MM',
         'Actions',
       ],

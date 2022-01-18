@@ -12,6 +12,24 @@ function padTime(data){
     else return data;
 }
 
+function niceData(x){
+    return {
+        _id: x._id,
+        startTime: format(parseISO(x.startTime), "MM/dd/yyyy' 'h:mm a"),
+        endTime: x?.endTime == null ? "": format(parseISO(x.endTime), "MM/dd/yyyy' 'h:mm a"),
+        totalElapsedMinutes: x.totalElapsedMinutes,
+        elapsedHours: x.elapsedHours,
+        elapsedMinutes: x.elapsedMinutes,
+        elapsedFormat: x?.endTime == null ? "" : padTime(x.elapsedHours)+ ":" + padTime(x.elapsedMinutes)
+    };
+}
+
+function allNiceData(data){
+    return data.map(x => {
+        return niceData(x);
+    })
+}
+
 export const activity = {
     namespaced: true,
     state: initialState,
@@ -25,35 +43,41 @@ export const activity = {
             )
         },
         postActivity({ commit }, data){
+            var d = '';
             return DataService.postActivity(data).then(
                 ret => {
-                    commit('updateActivity', ret)
-                    return Promise.resolve(ret);
+                    console.log("ret", ret);
+                    d = ret;
+                    Promise.resolve(ret);
+
+                    return DataService.getActivity(d.data._id).then(
+                        ret2 => {
+                            console.log("ret2", ret2);
+                            commit('updateActivity', ret2)
+                            return Promise.resolve(ret2);
+                        }
+                    );
                 }
-            )
+            );
         }
     },
     mutations: {
         getActivities(state, ret){
-            state.activities = ret.data;
+            state.activities = allNiceData(ret.data);
         },
         updateActivity(state, ret){
-            console.log(ret);
+
+            state.activities.push(niceData(ret.data));
+            state.activities.sort(function compare(a, b) {
+                var dateA = new Date(a.startTime);
+                var dateB = new Date(b.startTime);
+                return dateB - dateA;
+              });
         }
     },
     getters: {
         all: (state) => {
-            return state.activities.map(x => {
-                return {
-                    _id: x._id,
-                    startTime: format(parseISO(x.startTime), "MM/dd/yyyy' 'h:mm a"),
-                    endTime: x.endTime == null ? "": format(parseISO(x.endTime), "MM/dd/yyyy' 'h:mm a"),
-                    totalElapsedMinutes: x.totalElapsedMinutes,
-                    elapsedHours: x.elapsedHours,
-                    elapsedMinutes: x.elapsedMinutes,
-                    elapsedFormat: x.endTime == null ? "" : padTime(x.elapsedHours)+ ":" + padTime(x.elapsedMinutes)
-                }
-            })
+            return state.activities;
         },
 
         totalMinutes: (state, getters) => {

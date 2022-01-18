@@ -37,6 +37,10 @@ class DataService {
     return axios.get(API_URL + 'activities', { headers: authHeader() });
   }
 
+  getActivity(id){
+    return axios.get(API_URL + 'activities/' + id, { headers: authHeader() });
+  }
+
   postActivity(data){
     return axios
       .post(API_URL + 'activities', data, { headers: authHeader() })
