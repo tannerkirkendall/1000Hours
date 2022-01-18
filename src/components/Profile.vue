@@ -25,20 +25,22 @@
     </ul> -->
 
 
-    <ui-dialog v-model="open" fullscreen>
+    <ui-dialog v-model="openEdit" fullscreen>
       <ui-dialog-title>Edit Activity</ui-dialog-title>
       <ui-dialog-content>
-        <!-- {{popupData}} -->
-
+        <h5>Start Time:</h5>
         <ui-datepicker
-          v-model="datePickerStart"
+          v-model="editStartTime"
           :config="config"
           placeholder="Select Datetime.."
         >
         </ui-datepicker>
+        <br>
+        <br>
+        <h5>End Time:</h5>
 
         <ui-datepicker
-          v-model="datePickerEnd"
+          v-model="editEndTime"
           :config="config"
           placeholder="Select Datetime.."
         >
@@ -46,7 +48,7 @@
 
       </ui-dialog-content>
       <ui-dialog-actions>
-        <ui-button @click="open = false">OK</ui-button>
+        <ui-button @click="closeEditTime(postData)">OK</ui-button>
       </ui-dialog-actions>
     </ui-dialog>
 
@@ -63,7 +65,7 @@
         <div class="dessert">{{ data }}</div>
       </template>
       <template #actions="{ data }">
-        <ui-icon @click="show(data)">edit</ui-icon>
+        <ui-icon @click="editTime(data)">edit</ui-icon>
       </template>
     </ui-table>
     
@@ -84,20 +86,20 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { format } from 'date-fns'
 
 export default {
   name: 'Profile',
   data() {
     return {
-      open: false,
+      openEdit: false,
+      editStartTime: Date.now(),
+      editEndTime: '',
       data: this.activities,
-      popupData: '',
       config: {
         enableTime: true,
         dateFormat: 'm/d/Y h:i K'
       },
-      datePickerStart: '',
-      datePickerEnd: '',
       thead: [
         'StartTime',
         'HH:MM',
@@ -121,16 +123,24 @@ export default {
   },
 
   methods:{
-    show(data){
+    editTime(data){
       console.log(data);
-      this.popupData = data;
-      this.datePickerStart = data.startTime;
-      this.datePickerEnd = data.endTime;
-      this.open = true;
+      this.editStartTime = data.startTime;
+      this.editEndTime = data.endTime;
+      this.openEdit = true;
+    },
+
+    closeEditTime(data){
+      console.log("close", data);
+      this.editStartTime = '';
+      this.editEndTime = '';
+      this.openEdit = false;
     },
 
     newTime(){
-      this.open = true;
+      this.editStartTime = format(Date.now(), "MM/dd/yyyy' 'h:mm a");
+      this.editEndTime = '';
+      this.openEdit = true;
     }
   },
   

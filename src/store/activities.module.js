@@ -37,8 +37,6 @@ export const activity = {
                     _id: x._id,
                     startTime: format(parseISO(x.startTime), "MM/dd/yyyy' 'h:mm a"),
                     endTime: x.endTime == null ? "": format(parseISO(x.endTime), "MM/dd/yyyy' 'h:mm a"),
-                    startTimeRaw: format(parseISO(x.startTime), "MM/dd/yyyy' 'h:mm a"),
-                    endTimeRaw: x.endTime,
                     totalElapsedMinutes: x.totalElapsedMinutes,
                     elapsedHours: x.elapsedHours,
                     elapsedMinutes: x.elapsedMinutes,
