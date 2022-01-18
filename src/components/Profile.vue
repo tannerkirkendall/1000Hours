@@ -24,24 +24,47 @@
       {{totals}}
     </ul> -->
 
+
+<ui-dialog v-model="open" fullscreen>
+  <ui-dialog-title>Full-Screen Dialog Title</ui-dialog-title>
+  <ui-dialog-content>
+    {{popupData}}
+    <ui-datepicker
+      v-model="date"
+      :config="config"
+      placeholder="Select Datetime.."
+      toggle
+      clear
+    >
+      <template #toggle>
+        <i class="fa fa-calendar"></i>
+      </template>
+      <template #clear>
+        <i class="fa fa-close"></i>
+      </template>
+    </ui-datepicker>
+    
+  </ui-dialog-content>
+  <ui-dialog-actions>
+    <ui-button @click="open = false">OK</ui-button>
+  </ui-dialog-actions>
+</ui-dialog>
+
 <ui-table
   :data="activities"
+  showProgress
   fullwidth
   :thead="thead"
   :tbody="tbody"
   :scroll="{ y: 300 }"
   selected-key="_id"
 >
-
   <template #dessert="{ data }">
-    <div class="dessert">{{ data.dessert }}</div>
+    <div class="dessert">{{ data }}</div>
   </template>
   <template #actions="{ data }">
-    <!-- <ui-icon @click="show(data)">description</ui-icon> -->
     <ui-icon @click="show(data)">edit</ui-icon>
-    <!-- <ui-icon @click="show(data)">delete</ui-icon> -->
   </template>
-
 </ui-table>
 
 
@@ -56,7 +79,14 @@ export default {
   name: 'Profile',
   data() {
     return {
+      open: false,
       data: this.activities,
+      popupData: '',
+      config: {
+        enableTime: true,
+        dateFormat: 'm/d/Y h:i K'
+      },
+      date: '',
       thead: [
         'StartTime',
         'HH:MM',
@@ -64,7 +94,10 @@ export default {
       ],
       tbody: [
         {
-          field: 'startTime'
+          field: 'startTime',
+          class: data => {
+            return data.totalElapsedMinutes == null ? 'red' : 'blue';
+        }
         },
         {
           field: 'elapsedFormat'
@@ -79,12 +112,14 @@ export default {
   methods:{
     show(data){
       console.log(data);
+      this.popupData = data;
+      this.date = data.startTime;
+      this.open = true;
     }
   },
   
   computed: {
     currentUser() {
-      console.log('before current user')
       return this.$store.state.auth.user;
     },
     ...mapGetters('activity', {
@@ -93,7 +128,6 @@ export default {
     })
   },
   mounted() {
-    console.log('before mounted;')
     if (!this.currentUser) {
       this.$router.push('/login');
     }

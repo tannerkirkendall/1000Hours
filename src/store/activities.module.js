@@ -1,15 +1,12 @@
 import DataService from '../services/data.service';
 import { parseISO, format } from 'date-fns'
 
-
 const initialState = {
     activities: []
 }
 
 function padTime(data){
-    // console.log("padTime", data)
-    // console.log("padTime", data.length)
-    if (data != null && data < 9 ){
+    if (data != null && data <= 9 ){
         return "0" + data;
     }
     else return data;
@@ -38,12 +35,14 @@ export const activity = {
             return state.activities.map(x => {
                 return {
                     _id: x._id,
-                    startTime: format(parseISO(x.startTime), "MM/dd/yyyy' 'hh:mmaaa"),
-                    endTime: x.endTime == null ? "": format(parseISO(x.endTime), "MM/dd/yyyy' 'hh:mmaaa"),
+                    startTime: format(parseISO(x.startTime), "MM/dd/yyyy' 'h:mm a"),
+                    endTime: x.endTime == null ? "": format(parseISO(x.endTime), "MM/dd/yyyy' 'h:mm a"),
+                    startTimeRaw: format(parseISO(x.startTime), "MM/dd/yyyy' 'h:mm a"),
+                    endTimeRaw: x.endTime,
                     totalElapsedMinutes: x.totalElapsedMinutes,
                     elapsedHours: x.elapsedHours,
                     elapsedMinutes: x.elapsedMinutes,
-                    elapsedFormat: x.endTime == null ? "": padTime(x.elapsedHours)+ ":" + padTime(x.elapsedMinutes)
+                    elapsedFormat: x.endTime == null ? "" : padTime(x.elapsedHours)+ ":" + padTime(x.elapsedMinutes)
                 }
             })
         },
