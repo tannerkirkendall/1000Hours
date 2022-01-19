@@ -46,14 +46,26 @@ export const activity = {
             var d = '';
             return DataService.postActivity(data).then(
                 ret => {
-                    console.log("ret", ret);
                     d = ret;
                     Promise.resolve(ret);
 
                     return DataService.getActivity(d.data._id).then(
                         ret2 => {
-                            console.log("ret2", ret2);
                             commit('updateActivity', ret2)
+                            return Promise.resolve(ret2);
+                        }
+                    );
+                }
+            );
+        },
+        patchActivity({ commit }, patch){
+            console.log("patchActivity1", patch)
+            return DataService.patchActivity(patch.id, patch.data).then(
+                ret => {
+                    Promise.resolve(ret);
+                    return DataService.getActivity(patch.id).then(
+                        ret2 => {
+                            commit('editActivity', ret2)
                             return Promise.resolve(ret2);
                         }
                     );
@@ -66,13 +78,17 @@ export const activity = {
             state.activities = allNiceData(ret.data);
         },
         updateActivity(state, ret){
-
             state.activities.push(niceData(ret.data));
             state.activities.sort(function compare(a, b) {
                 var dateA = new Date(a.startTime);
                 var dateB = new Date(b.startTime);
                 return dateB - dateA;
               });
+        },
+        editActivity(state, ret){
+            var nice = niceData(ret.data);
+            var s = state.activities.findIndex(x => x._id === nice._id);
+            state.activities[s] = nice;
         }
     },
     getters: {

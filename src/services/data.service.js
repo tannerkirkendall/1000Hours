@@ -42,8 +42,13 @@ class DataService {
   }
 
   postActivity(data){
-    return axios
-      .post(API_URL + 'activities', data, { headers: authHeader() })
+    return axios.post(API_URL + 'activities', data, { headers: authHeader() })
+  }
+
+  patchActivity(id, data){
+    console.log("patchActivity2", id, data)
+    
+    return axios.patch(API_URL + 'activities/' + id, data, { headers: authHeader() })
   }
 }
 

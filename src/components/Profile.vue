@@ -50,7 +50,7 @@
 
       </ui-dialog-content>
       <ui-dialog-actions>
-        <ui-button @click="closeEditTime(postData)">OK</ui-button>
+        <ui-button @click="closeTimeDialog()">OK</ui-button>
       </ui-dialog-actions>
     </ui-dialog>
 
@@ -95,8 +95,10 @@ export default {
   data() {
     return {
       openEdit: false,
+      openEditFrom: '',
       editStartTime: Date.now(),
       editEndTime: '',
+      editId: '',
       data: this.activities,
       config: {
         enableTime: true,
@@ -130,36 +132,61 @@ export default {
   },
 
   methods:{
+    newTime(){
+      this.openEditFrom = 'new';
+      this.editStartTime = format(Date.now(), "MM/dd/yyyy' 'h:mm a");
+      this.editEndTime = '';
+      this.openEdit = true;
+    },
+
     editTime(data){
-      console.log(data);
+      this.openEditFrom = 'edit';
+      this.editId = data._id;
       this.editStartTime = data.startTime;
       this.editEndTime = data.endTime;
       this.openEdit = true;
     },
 
-    closeEditTime(data){
-      console.log("close", data);
+    closeTimeDialog(){
       var d = {
         startTime: new Date(this.editStartTime),
         endTime: this.editEndTime == '' ? null : new Date(this.editEndTime)
-
       };
-      console.log("payload", d);
-      this.postNewActivity(d);
+      
+      if (this.openEditFrom == 'new'){
+        this.postNewActivity(d);
+      } 
+      else if (this.openEditFrom == 'edit'){
+        this.postEditActivity(d, this.editId);
+      }
+
       this.editStartTime = '';
       this.editEndTime = '';
+      this.openEditFrom = '';
+      this.editId = '';
       this.openEdit = false;
     },
 
-    newTime(){
-      this.editStartTime = format(Date.now(), "MM/dd/yyyy' 'h:mm a");
-      this.editEndTime = '';
-      this.openEdit = true;
-    },
-    
     postNewActivity(d) {
-      console.log("1")
       this.$store.dispatch("activity/postActivity", d).then(
+        (error) => {
+          this.loading = false;
+          this.message =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+        }
+      );
+    },
+
+    postEditActivity(d, id){
+      var patch = {
+        data: d,
+        id: id
+      };
+      this.$store.dispatch("activity/patchActivity", patch).then(
         (error) => {
           this.loading = false;
           this.message =
