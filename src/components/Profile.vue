@@ -35,6 +35,7 @@
           placeholder="Select Datetime.."
         >
         </ui-datepicker>
+        <ui-button @click="setStartTimeNow()" icon="av_timer">Now</ui-button>
         <br>
         <br>
         <h5>End Time:</h5>
@@ -45,6 +46,7 @@
           placeholder="Select Datetime.."
         >
         </ui-datepicker>
+        <ui-button @click="setEndTimeNow()" icon="av_timer">Now</ui-button>
 
       </ui-dialog-content>
       <ui-dialog-actions>
@@ -69,9 +71,9 @@
       </template>
     </ui-table>
     
-    <ui-fab class="circle-div-rec">
+    <ui-fab v-show="showStopLatest" class="circle-div-rec">
       <template #default="{ iconClass }">
-        <ui-icon :class="iconClass">pause</ui-icon>
+        <ui-icon :class="iconClass">stop</ui-icon>
       </template>
     </ui-fab>
 
@@ -101,11 +103,12 @@ export default {
         dateFormat: 'm/d/Y h:i K'
       },
       thead: [
-        {
-          value: 'StartTime',
-          sort: 'desc',
-          columnId: 'startTime'
-        },
+        // {
+        //   value: 'StartTime',
+        //   sort: 'desc',
+        //   columnId: 'startTime'
+        // },
+        'Start Time',
         'HH:MM',
         'Actions',
       ],
@@ -137,7 +140,9 @@ export default {
     closeEditTime(data){
       console.log("close", data);
       var d = {
-        startTime: new Date(this.editStartTime)
+        startTime: new Date(this.editStartTime),
+        endTime: this.editEndTime == '' ? null : new Date(this.editEndTime)
+
       };
       console.log("payload", d);
       this.postNewActivity(d);
@@ -167,6 +172,14 @@ export default {
       );
     },
 
+    setStartTimeNow(){
+      this.editStartTime = format(Date.now(), "MM/dd/yyyy' 'h:mm a");
+    },
+
+    setEndTimeNow(){
+      this.editEndTime = format(Date.now(), "MM/dd/yyyy' 'h:mm a");
+    }
+
   },
   
   computed: {
@@ -176,7 +189,13 @@ export default {
     ...mapGetters('activity', {
       activities: 'all',
       totals: 'totalMinutes' 
-    })
+    }),
+    showStopLatest(){
+      var last = this.activities[0];
+      return last?.endTime == '' ? true : false;
+      // console.log("stop", last);
+      // return false;
+    }
   },
   mounted() {
     if (!this.currentUser) {
