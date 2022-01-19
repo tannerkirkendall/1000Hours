@@ -5,26 +5,6 @@
         <strong>{{currentUser.firstName}}'s</strong> Profile
       </h3>
     </header>
-    <!-- <p>
-      <strong>Token:</strong>
-      {{currentUser.accessToken.substring(0, 20)}} ... {{currentUser.accessToken.substr(currentUser.accessToken.length - 20)}}
-    </p>
-    <p>
-      <strong>Payload:</strong>
-      {{activities}}
-    </p>
-
-    <strong>Activities:</strong>
-    <ul>
-      <li v-for="a in activities" :key="a">{{a._id}}, {{a.startTime}}, {{a.endTime}}, {{a.elapsedHours}}:{{a.elapsedMinutes}}</li>
-    </ul>
-
-    <strong>Total Time:</strong>
-    <ul>
-      {{totals}}
-    </ul> -->
-
-
     <ui-dialog v-model="openEdit" fullscreen>
       <ui-dialog-title>Edit Activity</ui-dialog-title>
       <ui-dialog-content>
@@ -73,7 +53,7 @@
     
     <ui-fab v-show="showStopLatest" class="circle-div-rec">
       <template #default="{ iconClass }">
-        <ui-icon :class="iconClass">stop</ui-icon>
+        <ui-icon :class="iconClass" @click="stopRunningTime()">stop</ui-icon>
       </template>
     </ui-fab>
 
@@ -105,11 +85,6 @@ export default {
         dateFormat: 'm/d/Y h:i K'
       },
       thead: [
-        // {
-        //   value: 'StartTime',
-        //   sort: 'desc',
-        //   columnId: 'startTime'
-        // },
         'Start Time',
         'HH:MM',
         'Actions',
@@ -205,8 +180,15 @@ export default {
 
     setEndTimeNow(){
       this.editEndTime = format(Date.now(), "MM/dd/yyyy' 'h:mm a");
-    }
+    },
 
+    stopRunningTime(){
+      var d = {
+        startTime: new Date(this.latestActivity.startTime),
+        endTime: format(Date.now(), "MM/dd/yyyy' 'h:mm a")
+      };
+      this.postEditActivity(d, this.latestActivity._id);
+    }
   },
   
   computed: {
@@ -220,8 +202,9 @@ export default {
     showStopLatest(){
       var last = this.activities[0];
       return last?.endTime == '' ? true : false;
-      // console.log("stop", last);
-      // return false;
+    },
+    latestActivity(){
+      return this.activities[0];
     }
   },
   mounted() {
