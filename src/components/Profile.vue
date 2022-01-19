@@ -48,6 +48,7 @@
       </template>
       <template #actions="{ data }">
         <ui-icon @click="editTime(data)">edit</ui-icon>
+        <ui-icon @click="deteleTime(data)">delete</ui-icon>
       </template>
     </ui-table>
     
@@ -188,6 +189,9 @@ export default {
         endTime: format(Date.now(), "MM/dd/yyyy' 'h:mm a")
       };
       this.postEditActivity(d, this.latestActivity._id);
+    },
+    deteleTime(data){
+      console.log(data);
     }
   },
   
