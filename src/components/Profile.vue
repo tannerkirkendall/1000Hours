@@ -205,9 +205,18 @@ export default {
       };
       this.postEditActivity(d, this.latestActivity._id);
     },
+    
     deteleTime(data){
-      console.log(data);
-      this.deleteActivity(data._id);
+      this.$confirm({
+        message: 'Are you sure you want to delete?',
+        state: 'delete',
+        acceptText: 'Yes',
+        cancelText: 'No'
+      }).then((result) => {
+        if (result) {
+          this.deleteActivity(data._id);
+        }
+      });
     }
   },
   
