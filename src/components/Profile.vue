@@ -175,6 +175,20 @@ export default {
       );
     },
 
+    deleteActivity(d) {
+      this.$store.dispatch("activity/deleteActivity", d).then(
+        (error) => {
+          this.loading = false;
+          this.message =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+        }
+      );
+    },
+
     setStartTimeNow(){
       this.editStartTime = format(Date.now(), "MM/dd/yyyy' 'h:mm a");
     },
@@ -184,14 +198,16 @@ export default {
     },
 
     stopRunningTime(){
+      const date = new Date();
       var d = {
         startTime: new Date(this.latestActivity.startTime),
-        endTime: format(Date.now(), "MM/dd/yyyy' 'h:mm a")
+        endTime: date.toISOString()
       };
       this.postEditActivity(d, this.latestActivity._id);
     },
     deteleTime(data){
       console.log(data);
+      this.deleteActivity(data._id);
     }
   },
   

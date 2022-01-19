@@ -46,9 +46,11 @@ class DataService {
   }
 
   patchActivity(id, data){
-    console.log("patchActivity2", id, data)
-    
     return axios.patch(API_URL + 'activities/' + id, data, { headers: authHeader() })
+  }
+
+  deleteActivity(id){
+    return axios.delete(API_URL + 'activities/' + id, { headers: authHeader() })
   }
 }
 

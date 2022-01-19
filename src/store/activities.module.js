@@ -59,7 +59,6 @@ export const activity = {
             );
         },
         patchActivity({ commit }, patch){
-            console.log("patchActivity1", patch)
             return DataService.patchActivity(patch.id, patch.data).then(
                 ret => {
                     Promise.resolve(ret);
@@ -71,6 +70,14 @@ export const activity = {
                     );
                 }
             );
+        },
+        deleteActivity({commit}, id){
+            return DataService.deleteActivity(id).then(
+                ret => {
+                    commit('deleteActivity', id)
+                    return Promise.resolve(ret);
+                }
+            )
         }
     },
     mutations: {
@@ -89,7 +96,15 @@ export const activity = {
             var nice = niceData(ret.data);
             var s = state.activities.findIndex(x => x._id === nice._id);
             state.activities[s] = nice;
+        },
+        deleteActivity(state, id){
+            var s = state.activities.findIndex(x => x._id === id);
+            if (s > -1) {
+                state.activities.splice(s, 1);
+              }
+            
         }
+
     },
     getters: {
         all: (state) => {
