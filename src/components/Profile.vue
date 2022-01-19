@@ -77,7 +77,7 @@ export default {
     return {
       openEdit: false,
       openEditFrom: '',
-      editStartTime: Date.now(),
+      editStartTime: '',
       editEndTime: '',
       editId: '',
       data: this.activities,
