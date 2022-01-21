@@ -6,7 +6,11 @@
       </h3>
       <h5>YTD: {{totals.totalTime}}</h5>
       <h5>Today: {{totals.totalTimeToday}}</h5>
-
+      <h5>Daily Avg: {{totals.avgPerDay}}</h5>
+      <h5>Original Goal: {{totals.hhmmToDateOrignal}}</h5>
+      <h5>Adjusted Goal: ??</h5>
+      <h5>Time +/-: ??</h5>
+      {{totals}}
     </header>
     <ui-dialog v-model="openEdit" fullscreen>
       <ui-dialog-title>Edit Activity</ui-dialog-title>
@@ -265,5 +269,9 @@ export default {
     position: fixed;
     bottom: 21px;
     right: 100px;
+}
+
+h5, .h5 {
+  font-size: 1em;
 }
 </style>

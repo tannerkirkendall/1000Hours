@@ -1,5 +1,5 @@
 import DataService from '../services/data.service';
-import { parseISO, format, isToday } from 'date-fns'
+import { parseISO, format, isToday, endOfToday, differenceInDays } from 'date-fns'
 
 const initialState = {
     activities: [],
@@ -11,6 +11,10 @@ function padTime(data){
         return "0" + data;
     }
     else return data;
+}
+
+function getHHMM(minutes){
+    return padTime(Math.floor(minutes/60))+ ":" + padTime(Math.round(minutes%60));
 }
 
 function niceData(x){
@@ -115,32 +119,33 @@ export const activity = {
         totals: (state, getters) => {
             var total = 0;
             var totalToday = 0;
+            var daysYTD = differenceInDays(endOfToday(), new Date(2022, 0, 0))
+            var outsideMinutesYTDNeeded = Math.round((1000*60)/daysYTD);
+            var minutesPerDayYear = (1000*60)/365;
+
+
             getters.all.forEach(e => {
                 total += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0;
                 if (isToday(e.startTimeISO)) totalToday += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0;
             });
     
+            var minutesNeeded = outsideMinutesYTDNeeded - total
+
             const x = {
                 totalElapsedMinutes : total,
-                elapsedHours: Math.floor(total/60),
-                elapsedMinutes: total%60,
                 totalTodayAllMinutes: totalToday,
-                totalTodayHours: Math.floor(totalToday/60),
-                todayTodayMinutes: totalToday%60
+
+                
+                outsideMinutesYTDNeeded: outsideMinutesYTDNeeded,
+                HHMMNeeded: getHHMM(minutesNeeded)
+           
             }
 
             return {
-                totalTime: padTime(x.elapsedHours)+ ":" + padTime(x.elapsedMinutes),
-                totalTimeToday: padTime(x.totalTodayHours)+ ":" + padTime(x.todayTodayMinutes),
-                data: x
-            }
-        },
-
-        oldtotals: (state) => {
-            const x = state.totals;
-            return {
-                totalTime: padTime(x.elapsedHours)+ ":" + padTime(x.elapsedMinutes),
-                totalTimeToday: padTime(x.totalTodayHours)+ ":" + padTime(x.todayTodayMinutes),
+                totalTime: getHHMM(x.totalElapsedMinutes),
+                totalTimeToday: getHHMM(totalToday),
+                hhmmToDateOrignal: getHHMM(minutesPerDayYear),
+                avgPerDay: getHHMM(total/daysYTD),
                 data: x
             }
         }
