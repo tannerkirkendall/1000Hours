@@ -1,5 +1,5 @@
 import DataService from '../services/data.service';
-import { parseISO, format, isToday, endOfToday, differenceInDays } from 'date-fns'
+import { parseISO, format, isToday, endOfToday, differenceInDays, isThisWeek } from 'date-fns'
 
 const initialState = {
     activities: [],
@@ -14,7 +14,8 @@ function padTime(data){
 }
 
 function getHHMM(minutes){
-    return padTime(Math.floor(minutes/60))+ ":" + padTime(Math.round(minutes%60));
+    const adder = minutes < 0 ? "-" : ""
+    return adder + padTime(Math.floor(Math.abs(minutes)/60))+ ":" + padTime(Math.round(Math.abs(minutes)%60));
 }
 
 function niceData(x){
@@ -119,6 +120,7 @@ export const activity = {
         totals: (state, getters) => {
             var total = 0;
             var totalToday = 0;
+            var totalWeek = 0;
             var daysYTD = differenceInDays(endOfToday(), new Date(2022, 0, 0))
             var outsideMinutesYTDNeeded = Math.round((1000*60)/daysYTD);
             var minutesPerDayYear = (1000*60)/365;
@@ -127,25 +129,25 @@ export const activity = {
             getters.all.forEach(e => {
                 total += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0;
                 if (isToday(e.startTimeISO)) totalToday += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0;
+                if (isThisWeek(e.startTimeISO, 1)) totalWeek += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0;
             });
     
-            var minutesNeeded = outsideMinutesYTDNeeded - total
+            var minutesBehind =  total - outsideMinutesYTDNeeded
 
             const x = {
-                totalElapsedMinutes : total,
+                totalElapsedMinutes: total,
                 totalTodayAllMinutes: totalToday,
-
-                
                 outsideMinutesYTDNeeded: outsideMinutesYTDNeeded,
-                HHMMNeeded: getHHMM(minutesNeeded)
-           
+                minutesBehind: minutesBehind
             }
 
             return {
-                totalTime: getHHMM(x.totalElapsedMinutes),
+                totalTime: getHHMM(total),
                 totalTimeToday: getHHMM(totalToday),
+                totalWeek: getHHMM(totalWeek),
                 hhmmToDateOrignal: getHHMM(minutesPerDayYear),
                 avgPerDay: getHHMM(total/daysYTD),
+                timeNeeded: getHHMM(minutesBehind),
                 data: x
             }
         }

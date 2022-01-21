@@ -59,20 +59,6 @@ export default {
     currentUser() {
       return this.$store.state.auth.user;
     }
-    // showAdminBoard() {
-    //   if (this.currentUser && this.currentUser['roles']) {
-    //     return this.currentUser['roles'].includes('ROLE_ADMIN');
-    //   }
-
-    //   return false;
-    // },
-    // showModeratorBoard() {
-    //   if (this.currentUser && this.currentUser['roles']) {
-    //     return this.currentUser['roles'].includes('ROLE_MODERATOR');
-    //   }
-
-    //   return false;
-    // }
   },
   methods: {
     logOut() {
@@ -82,3 +68,13 @@ export default {
   }
 };
 </script>
+
+<style>
+.jumbotron {
+    padding: 1rem 1rem !important;
+      padding-top: 1rem !important;
+      padding-right: 2rem !important;
+      padding-bottom: .1rem !important;
+      padding-left: 1rem !important;
+}
+</style>
