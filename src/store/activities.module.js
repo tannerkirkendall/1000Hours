@@ -137,6 +137,7 @@ export const activity = {
     
             return {
                 totalTime: getHHMM(totalYear),
+                totalTimeLeft: getHHMM(totalYear - (1000*60)),
                 totalTimeToday: getHHMM(totalToday),
                 totalWeek: getHHMM(totalWeek),
                 dailyTimeNeededOrg: getHHMM(dailyTimeNeededOrgMin),

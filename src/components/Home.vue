@@ -4,7 +4,7 @@
       <h3>
         <strong>{{currentUser.firstName}}'s</strong> Time
       </h3>
-      <h5>YTD: {{totals.totalTime}}</h5>
+      <h5>YTD: {{totals.totalTime}} / {{totals.totalTimeLeft}}</h5>
       <h5>Today: {{totals.totalTimeToday}}</h5>
       <h5>This Week: {{totals.totalWeek}}</h5>
       <h5>Daily Avg: {{totals.avgPerDay}}</h5>
