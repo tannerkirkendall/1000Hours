@@ -8,10 +8,9 @@
       <h5>Today: {{totals.totalTimeToday}}</h5>
       <h5>This Week: {{totals.totalWeek}}</h5>
       <h5>Daily Avg: {{totals.avgPerDay}}</h5>
-      <h5>Original Goal: {{totals.hhmmToDateOrignal}}</h5>
-      <h5>Adjusted Goal: ??</h5>
+      <h5>Original Goal: {{totals.dailyTimeNeededOrg}}</h5>
+      <h5>Adjusted Goal: {{totals.dailyTimeNeededAdj}}</h5>
       <h5>Pace: {{totals.timeNeeded}}</h5>
-      <!-- {{totals}} -->
     </header>
     <ui-dialog v-model="openEdit" fullscreen>
       <ui-dialog-title>Edit Activity</ui-dialog-title>
