@@ -137,7 +137,8 @@ export const activity = {
     
             return {
                 totalTime: getHHMM(totalYear),
-                totalTimeLeft: getHHMM(totalYear - (1000*60)),
+                totalTimeLeft: getHHMM((1000*60) - totalYear),
+                totalPercentDone: Number.parseFloat((totalYear/((1000*60) - totalYear))*100).toFixed(2),
                 totalTimeToday: getHHMM(totalToday),
                 totalWeek: getHHMM(totalWeek),
                 dailyTimeNeededOrg: getHHMM(dailyTimeNeededOrgMin),
