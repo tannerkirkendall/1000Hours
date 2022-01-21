@@ -1,8 +1,9 @@
 import DataService from '../services/data.service';
-import { parseISO, format } from 'date-fns'
+import { parseISO, format, isToday } from 'date-fns'
 
 const initialState = {
-    activities: []
+    activities: [],
+    totals: {}
 }
 
 function padTime(data){
@@ -15,6 +16,8 @@ function padTime(data){
 function niceData(x){
     return {
         _id: x._id,
+        startTimeISO: parseISO(x.startTime),
+        endTimeISO: parseISO(x.endTime),
         startTime: format(parseISO(x.startTime), "MM/dd/yyyy' 'h:mm a"),
         endTime: x?.endTime == null ? "": format(parseISO(x.endTime), "MM/dd/yyyy' 'h:mm a"),
         totalElapsedMinutes: x.totalElapsedMinutes,
@@ -48,13 +51,12 @@ export const activity = {
                 ret => {
                     d = ret;
                     Promise.resolve(ret);
-
                     return DataService.getActivity(d.data._id).then(
                         ret2 => {
                             commit('updateActivity', ret2)
                             return Promise.resolve(ret2);
                         }
-                    );
+                    )
                 }
             );
         },
@@ -75,7 +77,7 @@ export const activity = {
             return DataService.deleteActivity(id).then(
                 ret => {
                     commit('deleteActivity', id)
-                    return Promise.resolve(ret);
+                    Promise.resolve(ret);
                 }
             )
         }
@@ -101,8 +103,7 @@ export const activity = {
             var s = state.activities.findIndex(x => x._id === id);
             if (s > -1) {
                 state.activities.splice(s, 1);
-              }
-            
+              }   
         }
 
     },
@@ -111,13 +112,37 @@ export const activity = {
             return state.activities;
         },
 
-        totalMinutes: (state, getters) => {
-            var totalMin = 0;
-            getters.all.forEach((x) => {
-                totalMin += x.totalElapsedMinutes > 0 ? parseInt(x.totalElapsedMinutes) : 0
+        totals: (state, getters) => {
+            var total = 0;
+            var totalToday = 0;
+            getters.all.forEach(e => {
+                total += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0;
+                if (isToday(e.startTimeISO)) totalToday += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0;
             });
-            return totalMin
-            
+    
+            const x = {
+                totalElapsedMinutes : total,
+                elapsedHours: Math.floor(total/60),
+                elapsedMinutes: total%60,
+                totalTodayAllMinutes: totalToday,
+                totalTodayHours: Math.floor(totalToday/60),
+                todayTodayMinutes: totalToday%60
+            }
+
+            return {
+                totalTime: padTime(x.elapsedHours)+ ":" + padTime(x.elapsedMinutes),
+                totalTimeToday: padTime(x.totalTodayHours)+ ":" + padTime(x.todayTodayMinutes),
+                data: x
+            }
+        },
+
+        oldtotals: (state) => {
+            const x = state.totals;
+            return {
+                totalTime: padTime(x.elapsedHours)+ ":" + padTime(x.elapsedMinutes),
+                totalTimeToday: padTime(x.totalTodayHours)+ ":" + padTime(x.todayTodayMinutes),
+                data: x
+            }
         }
     }
 };

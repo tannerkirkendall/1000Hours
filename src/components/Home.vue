@@ -2,8 +2,11 @@
   <div class="container">
     <header class="jumbotron">
       <h3>
-        <strong>{{currentUser.firstName}}'s</strong> Profile
+        <strong>{{currentUser.firstName}}'s</strong> Time
       </h3>
+      <h5>YTD: {{totals.totalTime}}</h5>
+      <h5>Today: {{totals.totalTimeToday}}</h5>
+
     </header>
     <ui-dialog v-model="openEdit" fullscreen>
       <ui-dialog-title>Edit Activity</ui-dialog-title>
@@ -227,7 +230,7 @@ export default {
     },
     ...mapGetters('activity', {
       activities: 'all',
-      totals: 'totalMinutes' 
+      totals: 'totals' 
     }),
     showStopLatest(){
       var last = this.activities[0];
@@ -242,6 +245,7 @@ export default {
       this.$router.push('/login');
     }else {
       this.$store.dispatch("activity/init");
+      // this.$store.dispatch("activity/getTotals");
     }
   }
 };
