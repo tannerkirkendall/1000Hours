@@ -122,9 +122,10 @@ export const activity = {
             var totalToday = 0;
             var totalWeek = 0;
             var daysYTD = differenceInDays(endOfToday(), new Date(2022, 0, 0))
-            var outsideMinutesYTDNeeded = Math.round((1000*60)/daysYTD);
-            var dailyTimeNeededOrgMin = (1000*60)/365;
-
+            var dailyTimeNeededOrgMin = 165;
+            var outsideMinutesYTDNeeded = Math.round(dailyTimeNeededOrgMin * daysYTD);
+            var daysLeftInYear = differenceInDays(new Date(2022, 11, 31), startOfToday())
+            
             getters.all.forEach(e => {
                 totalYear += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0;
                 if (isToday(e.startTimeISO)) totalToday += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0;
@@ -132,8 +133,7 @@ export const activity = {
             });
 
             var minutesBehind =  totalYear - outsideMinutesYTDNeeded
-            var daysLeftInYear = differenceInDays(new Date(2022, 11, 31), startOfToday())
-            var dailyTimeNeededAdjMin = (((1000*60)-outsideMinutesYTDNeeded) + minutesBehind)/daysLeftInYear
+            var dailyTimeNeededAdjMin =  ((165 * daysLeftInYear) - minutesBehind)/daysLeftInYear;
     
             return {
                 totalTime: getHHMM(totalYear),
@@ -142,10 +142,12 @@ export const activity = {
                 totalTimeToday: getHHMM(totalToday),
                 totalWeek: getHHMM(totalWeek),
                 dailyTimeNeededOrg: getHHMM(dailyTimeNeededOrgMin),
+                dailyTimeNeededAdj: getHHMM(dailyTimeNeededAdjMin),
                 avgPerDay: getHHMM(totalYear/daysYTD),
-                timeNeeded: getHHMM(minutesBehind),
-                dailyTimeNeededAdj: getHHMM(dailyTimeNeededAdjMin)
+                timeNeeded: getHHMM(minutesBehind)
             }
+
+            //Pace = (165 * DayOfYear) - minuteBehind
         }
     }
 };
