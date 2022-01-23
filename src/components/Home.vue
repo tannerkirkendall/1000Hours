@@ -16,24 +16,30 @@
       <ui-dialog-title>Edit Activity</ui-dialog-title>
       <ui-dialog-content>
         <h5>Start Time:</h5>
-        <ui-datepicker
+        <Datepicker v-model="editStartTime" :is24="false" autoApply :closeOnAutoApply="false"></Datepicker>
+
+        <!-- <ui-datepicker
           v-model="editStartTime"
           :config="config"
           placeholder="Select Datetime.."
         >
-        </ui-datepicker>
+        </ui-datepicker> -->
         <ui-button @click="setStartTimeNow()" icon="av_timer">Now</ui-button>
         <br>
         <br>
         <h5>End Time:</h5>
 
-        <ui-datepicker
+        <!-- <ui-datepicker
           v-model="editEndTime"
           :config="config"
           placeholder="Select Datetime.."
         >
-        </ui-datepicker>
+        </ui-datepicker> -->
+        <Datepicker v-model="editEndTime" :is24="false" autoApply :closeOnAutoApply="false"></Datepicker>
+
         <ui-button @click="setEndTimeNow()" icon="av_timer">Now</ui-button>
+
+
 
       </ui-dialog-content>
       <ui-dialog-actions>
@@ -78,9 +84,12 @@
 <script>
 import { mapGetters } from 'vuex'
 import { format } from 'date-fns'
+import Datepicker from 'vue3-date-time-picker';
+import 'vue3-date-time-picker/dist/main.css'
 
 export default {
   name: 'Home',
+  components: { Datepicker },
   data() {
     return {
       openEdit: false,
