@@ -16,30 +16,12 @@
       <ui-dialog-content>
         <h5>Start Time:</h5>
         <Datepicker v-model="editStartTime" :is24="false" autoApply :closeOnAutoApply="false"></Datepicker>
-
-        <!-- <ui-datepicker
-          v-model="editStartTime"
-          :config="config"
-          placeholder="Select Datetime.."
-        >
-        </ui-datepicker> -->
         <ui-button @click="setStartTimeNow()" icon="av_timer">Now</ui-button>
         <br>
         <br>
         <h5>End Time:</h5>
-
-        <!-- <ui-datepicker
-          v-model="editEndTime"
-          :config="config"
-          placeholder="Select Datetime.."
-        >
-        </ui-datepicker> -->
         <Datepicker v-model="editEndTime" :is24="false" autoApply :closeOnAutoApply="false"></Datepicker>
-
         <ui-button @click="setEndTimeNow()" icon="av_timer">Now</ui-button>
-
-
-
       </ui-dialog-content>
       <ui-dialog-actions>
         <ui-button @click="closeTimeDialog()">OK</ui-button>
