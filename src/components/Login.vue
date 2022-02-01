@@ -28,6 +28,12 @@
           </button>
         </div>
 
+        <div class="center">
+          <router-link to="/register" class="nav-link">
+            <font-awesome-icon icon="user-plus" /> Register
+          </router-link>
+        </div>
+
         <div class="form-group">
           <div v-if="message" class="alert alert-danger" role="alert">
             {{ message }}
@@ -87,6 +93,9 @@ export default {
         }
       );
     },
+  routeToRegister(){
+    this.$router.push("/register");
+  }
   },
 };
 </script>
@@ -123,5 +132,8 @@ label {
 }
 .error-feedback {
   color: red;
+}
+.center {
+  text-align: center;
 }
 </style>
