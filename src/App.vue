@@ -1,6 +1,53 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-expand navbar-dark bg-dark">
+      <ui-top-app-bar
+        content-selector="#content-main"
+        :type="type"
+        :title="title"
+        @nav="openDrawer = true"
+      >
+
+      </ui-top-app-bar>
+
+      <ui-drawer v-if="currentUser" v-model="openDrawer" type="modal">
+        <ui-drawer-header>
+          <ui-drawer-title>Welcome {{ currentUser.firstName }}</ui-drawer-title>
+        </ui-drawer-header>
+        <ui-drawer-content>
+          <ui-list-divider></ui-list-divider>
+          <ui-list>
+            <ui-nav-item href="/">
+                <font-awesome-icon icon="running"/> &nbsp; Activities
+            </ui-nav-item>
+            <ui-nav-item href="/">
+                <font-awesome-icon icon="trophy"/> &nbsp; Stats
+            </ui-nav-item>
+            <ui-nav-item href="/profile">
+                <font-awesome-icon icon="user"/> &nbsp; Profile
+            </ui-nav-item>
+            <ui-list-divider></ui-list-divider>
+            <ui-nav-item href="/" @click.prevent="logOut">
+                <font-awesome-icon icon="sign-out-alt"/> &nbsp; Logout
+            </ui-nav-item>
+          </ui-list>
+        </ui-drawer-content>
+      </ui-drawer>
+
+      <ui-drawer v-if="!currentUser" v-model="openDrawer" type="modal">
+        <ui-drawer-header>
+          <ui-drawer-title>Welcome Guest</ui-drawer-title>
+        </ui-drawer-header>
+        <ui-drawer-content>
+          <ui-list-divider></ui-list-divider>
+          <ui-list>
+            <ui-nav-item href="/login">
+                <font-awesome-icon icon="sign-in-alt"/> &nbsp; Login
+            </ui-nav-item>
+          </ui-list>
+        </ui-drawer-content>
+      </ui-drawer>
+
+    <!-- <nav class="navbar navbar-expand navbar-dark bg-dark">
       <a href="/" class="navbar-brand">Hours Outside</a>
       <div class="navbar-nav mr-auto">
         <li class="nav-item">
@@ -8,22 +55,12 @@
             <font-awesome-icon icon="home" /> Home
           </router-link>
         </li>
-        <!-- <li v-if="showAdminBoard" class="nav-item">
-          <router-link to="/admin" class="nav-link">Admin Board</router-link>
-        </li>
-        <li v-if="showModeratorBoard" class="nav-item">
-          <router-link to="/mod" class="nav-link">Moderator Board</router-link>
-        </li> -->
-        <!-- <li class="nav-item">
-          <router-link v-if="currentUser" to="/user" class="nav-link">User</router-link>
-        </li> -->
+
       </div>
 
       <div v-if="!currentUser" class="navbar-nav ml-auto">
         <li class="nav-item">
-          <!-- <router-link to="/register" class="nav-link">
-            <font-awesome-icon icon="user-plus" /> Sign Up
-          </router-link> -->
+
         </li>
         <li class="nav-item">
           <router-link to="/login" class="nav-link">
@@ -45,7 +82,7 @@
           </a>
         </li>
       </div>
-    </nav>
+    </nav> -->
 
     <div class="container">
       <router-view />
@@ -55,6 +92,13 @@
 
 <script>
 export default {
+  data() {
+    return {
+      type: 0,
+      title: 'Hours Outside',
+      openDrawer: false
+    };
+  },
   computed: {
     currentUser() {
       return this.$store.state.auth.user;
@@ -70,11 +114,7 @@ export default {
 </script>
 
 <style>
-.jumbotron {
-    padding: 1rem 1rem !important;
-      padding-top: 1rem !important;
-      padding-right: 2rem !important;
-      padding-bottom: .1rem !important;
-      padding-left: 1rem !important;
+#app{
+  background-color:rgb(245, 245, 245);
 }
 </style>

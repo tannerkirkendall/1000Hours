@@ -264,4 +264,13 @@ export default {
 h5, .h5 {
   font-size: 1em;
 }
+
+.jumbotron {
+  padding: 1rem 1rem ;
+  padding-top: 4rem ;
+  padding-right: 2rem ;
+  padding-bottom: .1rem ;
+  padding-left: 1rem ;
+  background-color: white;
+}
 </style>
