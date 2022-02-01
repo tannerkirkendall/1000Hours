@@ -5,6 +5,7 @@
         :type="type"
         :title="title"
         @nav="openDrawer = true"
+        :fixed=true
       >
 
       </ui-top-app-bar>
@@ -94,7 +95,7 @@
 export default {
   data() {
     return {
-      type: 0,
+      type: 2,
       title: 'Hours Outside',
       openDrawer: false
     };
