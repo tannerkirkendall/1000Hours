@@ -129,7 +129,7 @@ export const activity = {
             getters.all.forEach(e => {
                 totalYear += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0;
                 if (isToday(e.startTimeISO)) totalToday += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0;
-                if (isThisWeek(e.startTimeISO, 1)) totalWeek += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0;
+                if (isThisWeek(e.startTimeISO, { weekStartsOn: 1 })) totalWeek += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0;
             });
 
             var minutesBehind =  totalYear - outsideMinutesYTDNeeded
