@@ -3,8 +3,8 @@ import Home from "./components/Home.vue";
 import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
 // lazy-loaded
- const Profile = () => import("./components/Profile.vue")
-// const BoardAdmin = () => import("./components/BoardAdmin.vue")
+const Profile = () => import("./components/Profile.vue")
+const Stats = () => import("./components/Stats.vue")
 // const BoardModerator = () => import("./components/BoardModerator.vue")
 // const BoardUser = () => import("./components/BoardUser.vue")
 
@@ -31,6 +31,12 @@ const routes = [
     name: "profile",
     // lazy-loaded
     component: Profile,
+  },
+  {
+    path: "/stats",
+    name: "stats",
+    // lazy-loaded
+    component: Stats,
   }
 //   {
 //     path: "/admin",

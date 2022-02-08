@@ -144,13 +144,10 @@ export const activity = {
                 weekTodayPercent: Math.floor((totalWeek/(dailyTimeNeededAdjMin*7))*100),
                 totalWeek: getHHMM(totalWeek),
                 totalWeekNeeded: getHHMM(dailyTimeNeededAdjMin * 7),
-                dailyTimeNeededOrg: getHHMM(dailyTimeNeededOrgMin),
                 dailyTimeNeededAdj: getHHMM(dailyTimeNeededAdjMin),
                 avgPerDay: getHHMM(totalYear/daysYTD),
                 timeNeeded: getHHMM(minutesBehind)
             }
-
-            //Pace = (165 * DayOfYear) - minuteBehind
         }
     }
 };

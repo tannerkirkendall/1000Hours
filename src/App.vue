@@ -20,7 +20,7 @@
             <ui-nav-item href="/">
                 <font-awesome-icon icon="running"/> &nbsp; Activities
             </ui-nav-item>
-            <ui-nav-item href="/">
+            <ui-nav-item href="/stats">
                 <font-awesome-icon icon="trophy"/> &nbsp; Stats
             </ui-nav-item>
             <ui-nav-item href="/profile">

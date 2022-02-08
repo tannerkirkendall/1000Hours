@@ -8,7 +8,6 @@
       <h5>This Week: {{totals.totalWeek}} / {{totals.totalWeekNeeded}} ({{totals.weekTodayPercent}}%)</h5>
       <h5>Today: {{totals.totalTimeToday}} / {{totals.dailyTimeNeededAdj}} ({{totals.timeTodayPercent}}%)</h5>
       <h5>Daily Avg: {{totals.avgPerDay}}</h5>
-      <h5>Original Goal: {{totals.dailyTimeNeededOrg}}</h5>
       <h5>Pace: {{totals.timeNeeded}}</h5>
     </header>
     <ui-dialog v-model="openEdit" fullscreen>
