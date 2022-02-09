@@ -148,6 +148,19 @@ export const activity = {
                 avgPerDay: getHHMM(totalYear/daysYTD),
                 timeNeeded: getHHMM(minutesBehind)
             }
+        },
+
+        hoursPerDayThisWeek(){
+            return{
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                datasets: [
+                  {
+                    label: 'GitHub Commits',
+                    backgroundColor: '#f87979',
+                    data: [25, 20, 12, 18, 11, 10, 20, 30, 9, 40, 12, 11]
+                  }
+                ]
+              }
         }
     }
 };
