@@ -17,7 +17,7 @@ export default {
   data() {
     return {
       content: "adsf",
-      chartData:this.htw
+      htww: this.htw
     };
   },
   computed: {
@@ -27,15 +27,14 @@ export default {
     ...mapGetters('activity', {
       htw: 'hoursPerDayThisWeek' 
     })
+
   },
   mounted() {
     if (!this.currentUser) {
       this.$router.push('/login');
     }else {
       this.$store.dispatch("activity/init");
-      mapGetters('activity', {
-        htw: 'hoursPerDayThisWeek' 
-    })
+
     }
   }
 

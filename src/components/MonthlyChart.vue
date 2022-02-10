@@ -17,6 +17,11 @@ export default defineComponent({
   },
   mounted () {
     this.renderChart(this.chartData, this.chartOptions)
+    console.log("char", this.chartData)
+  },
+  updated(){
+    this.renderChart(this.chartData, this.chartOptions)
+    console.log("char2", this.chartData)
   }
 })
 </script>

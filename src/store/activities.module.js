@@ -1,9 +1,18 @@
 import DataService from '../services/data.service';
-import { parseISO, format, isToday, endOfToday, differenceInDays, isThisWeek, startOfToday } from 'date-fns'
+import { parseISO, format, isToday, endOfToday, differenceInDays, isThisWeek, startOfToday, 
+    isMonday, isTuesday, isWednesday, isThursday, isFriday, isSaturday, isSunday } from 'date-fns'
 
 const initialState = {
     activities: [],
     totals: {}
+}
+
+function minutesToHours(data){
+    if (data!= null && data > 0){
+        return Number.parseFloat(data/60).toFixed(2);
+    }else {
+        return 0;
+    }
 }
 
 function padTime(data){
@@ -150,17 +159,42 @@ export const activity = {
             }
         },
 
-        hoursPerDayThisWeek(){
-            return{
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        hoursPerDayThisWeek(state, getters) {
+            var monday = 0;
+            var tuesday = 0;
+            var wednesday = 0;
+            var thursday = 0;
+            var friday = 0;
+            var saturday = 0;
+            var sunday = 0;
+
+            getters.all.forEach(e => {
+                if (isThisWeek(e.startTimeISO, { weekStartsOn: 1 }))
+                {
+                    if (isMonday(e.startTimeISO)) monday += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0
+                    if (isTuesday(e.startTimeISO)) tuesday += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0
+                    if (isWednesday(e.startTimeISO)) wednesday += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0
+                    if (isThursday(e.startTimeISO)) thursday += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0
+                    if (isFriday(e.startTimeISO)) friday += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0
+                    if (isSaturday(e.startTimeISO)) saturday += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0
+                    if (isSunday(e.startTimeISO)) sunday += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0
+                }
+            });
+
+            var data = {
+                
+                labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
                 datasets: [
                   {
-                    label: 'GitHub Commits',
+                    label: 'Hours',
                     backgroundColor: '#f87979',
-                    data: [25, 20, 12, 18, 11, 10, 20, 30, 9, 40, 12, 11]
+                    data: [minutesToHours(monday), minutesToHours(tuesday), minutesToHours(wednesday), minutesToHours(thursday), 
+                        minutesToHours(friday), minutesToHours(saturday), minutesToHours(sunday)]
                   }
                 ]
               }
+
+            return data;
         }
     }
 };
