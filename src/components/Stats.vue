@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <h4>Hours Per Day: This Week</h4>
-    <MonthlyChart v-bind:chartData="htw" class="charts"  />
+    <h4>Hours Per Day</h4>
+    <MonthlyChart v-bind:chartData="htw.data" v-bind:chartOptions="htw.options" class="charts"  />
   </div>
 </template>
 
@@ -17,7 +17,10 @@ export default {
   data() {
     return {
       content: "adsf",
-      htww: this.htw
+      chartOptions: {
+
+
+        }
     };
   },
   computed: {
@@ -39,6 +42,7 @@ export default {
   }
 
 };
+
 </script>
 <style scoped>
   .container{

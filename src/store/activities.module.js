@@ -1,10 +1,19 @@
 import DataService from '../services/data.service';
 import { parseISO, format, isToday, endOfToday, differenceInDays, isThisWeek, startOfToday, 
-    isMonday, isTuesday, isWednesday, isThursday, isFriday, isSaturday, isSunday } from 'date-fns'
+    isMonday, isTuesday, isWednesday, isThursday, isFriday, isSaturday, isSunday, startOfWeek, 
+    addDays, endOfWeek, isWithinInterval } from 'date-fns'
 
 const initialState = {
     activities: [],
     totals: {}
+}
+
+function isLastWeek(date){
+    var today = Date.now();
+    var sow = addDays(startOfWeek(today, { weekStartsOn: 1 }), -7)
+    var eow = endOfWeek(sow, { weekStartsOn: 1 });
+    // return {sow: sow, eow:eow, is: isWithinInterval(new Date(2022, 1, 7), {start:sow, end:eow})};
+    return isWithinInterval(date, {start:sow, end:eow});
 }
 
 function minutesToHours(data){
@@ -13,6 +22,15 @@ function minutesToHours(data){
     }else {
         return 0;
     }
+}
+
+function hoursToMinutes(data){
+    const words = String(data).split('.');
+    const hours = words[0]*60;
+    const m1 = parseInt(words[1]);
+    var multiplier = m1.toString().length == 1 ? .1 : .01;
+    var m2 = Math.floor((((m1*multiplier)/100)*60).toFixed(2) * 100)
+    return getHHMM(hours+m2);
 }
 
 function padTime(data){
@@ -168,6 +186,14 @@ export const activity = {
             var saturday = 0;
             var sunday = 0;
 
+            var lastmonday = 0;
+            var lasttuesday = 0;
+            var lastwednesday = 0;
+            var lastthursday = 0;
+            var lastfriday = 0;
+            var lastsaturday = 0;
+            var lastsunday = 0;
+
             getters.all.forEach(e => {
                 if (isThisWeek(e.startTimeISO, { weekStartsOn: 1 }))
                 {
@@ -179,6 +205,16 @@ export const activity = {
                     if (isSaturday(e.startTimeISO)) saturday += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0
                     if (isSunday(e.startTimeISO)) sunday += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0
                 }
+                if (isLastWeek(e.startTimeISO))
+                {
+                    if (isMonday(e.startTimeISO)) lastmonday += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0
+                    if (isTuesday(e.startTimeISO)) lasttuesday += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0
+                    if (isWednesday(e.startTimeISO)) lastwednesday += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0
+                    if (isThursday(e.startTimeISO)) lastthursday += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0
+                    if (isFriday(e.startTimeISO)) lastfriday += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0
+                    if (isSaturday(e.startTimeISO)) lastsaturday += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0
+                    if (isSunday(e.startTimeISO)) lastsunday += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0
+                }
             });
 
             var data = {
@@ -186,15 +222,38 @@ export const activity = {
                 labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
                 datasets: [
                   {
-                    label: 'Hours',
+                    label: 'This Week',
                     backgroundColor: '#f87979',
                     data: [minutesToHours(monday), minutesToHours(tuesday), minutesToHours(wednesday), minutesToHours(thursday), 
                         minutesToHours(friday), minutesToHours(saturday), minutesToHours(sunday)]
+                  },
+                  {
+                    label: 'Last Week',
+                    backgroundColor: '#5DD50A',
+                    data: [minutesToHours(lastmonday), minutesToHours(lasttuesday), minutesToHours(lastwednesday), minutesToHours(lastthursday), 
+                        minutesToHours(lastfriday), minutesToHours(lastsaturday), minutesToHours(lastsunday)]
                   }
                 ]
               }
 
-            return data;
+            return {
+                data: data,
+                options: {
+                    responsive: true,
+                    title: {
+                      display: false,
+                      text: 'Hours Per Day'
+                    },
+                    tooltips: {
+                      enabled: true,
+                      callbacks: {
+                        label: ((tooltipItems) => {
+                          return hoursToMinutes(tooltipItems.yLabel)
+                        })
+                      }
+                    }
+                }
+            };
         }
     }
 };
