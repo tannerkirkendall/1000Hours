@@ -1,7 +1,7 @@
 import DataService from '../services/data.service';
 import { parseISO, format, isToday, endOfToday, differenceInDays, isThisWeek, startOfToday, 
     isMonday, isTuesday, isWednesday, isThursday, isFriday, isSaturday, isSunday, startOfWeek, 
-    addDays, endOfWeek, isWithinInterval } from 'date-fns'
+    addDays, endOfWeek, isWithinInterval, getMonth } from 'date-fns'
 
 const initialState = {
     activities: [],
@@ -258,6 +258,67 @@ export const activity = {
                     }
                 }
             };
+        },
+
+        hoursPerMonth(state, getters){
+            var jan = 0;
+            var feb = 0;
+            var mar = 0;
+            var apr = 0;
+            var may = 0;
+            var june = 0;
+            var july = 0;
+            var aug = 0;
+            var sep = 0;
+            var oct = 0;
+            var nov = 0;
+            var dec = 0;
+
+            getters.all.forEach(e => {
+                var monthOfYear = getMonth(e.startTimeISO)
+                if (monthOfYear == 0) jan += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0;
+                if (monthOfYear == 1) feb += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0;
+                if (monthOfYear == 2) mar += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0;
+                if (monthOfYear == 3) apr += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0;
+                if (monthOfYear == 4) may += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0;
+                if (monthOfYear == 5) june += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0;
+                if (monthOfYear == 6) july += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0;
+                if (monthOfYear == 7) aug += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0;
+                if (monthOfYear == 8) sep += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0;
+                if (monthOfYear == 9) oct += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0;
+                if (monthOfYear == 10) nov += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0;
+                if (monthOfYear == 11) dec += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0;
+            });
+            var data = {
+                
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [
+                  {
+                    label: 'This Month',
+                    backgroundColor: '#6200ee',
+                    data: [minutesToHours(jan), minutesToHours(feb), minutesToHours(mar), minutesToHours(apr), 
+                        minutesToHours(may), minutesToHours(june), minutesToHours(july),
+                        minutesToHours(aug), minutesToHours(sep), minutesToHours(oct),
+                        minutesToHours(nov), minutesToHours(dec) ]
+                  }
+                ]
+              }
+
+              return {
+                data: data,
+                options: {
+                    responsive: true,
+                    tooltips: {
+                      enabled: true,
+                      callbacks: {
+                        label: ((tooltipItems) => {
+                          return hoursToMinutes(tooltipItems.yLabel)
+                        })
+                      }
+                    }
+                }
+            };
+
         }
     }
 };

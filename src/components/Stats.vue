@@ -2,6 +2,9 @@
   <div class="container">
     <h4>Hours Per Day</h4>
     <MonthlyChart v-bind:chartData="htw.data" v-bind:chartOptions="htw.options" class="charts"  />
+    <br>
+    <h4>Hours Per Month</h4>
+    <MonthlyChart v-bind:chartData="hpm.data" v-bind:chartOptions="hpm.options" class="charts"  />
   </div>
 </template>
 
@@ -28,7 +31,8 @@ export default {
       return this.$store.state.auth.user;
     },
     ...mapGetters('activity', {
-      htw: 'hoursPerDayThisWeek' 
+      htw: 'hoursPerDayThisWeek' ,
+      hpm: 'hoursPerMonth'
     })
 
   },
