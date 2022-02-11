@@ -165,7 +165,7 @@ export const activity = {
             return {
                 totalTime: getHHMM(totalYear),
                 totalTimeLeft: getHHMM((1000*60) - totalYear),
-                totalPercentDone: Number.parseFloat((totalYear/((1000*60) - totalYear))*100).toFixed(2),
+                totalPercentDone: Number.parseFloat((totalYear/((1000*60)))*100).toFixed(2),
                 totalTimeToday: getHHMM(totalToday),
                 timeTodayPercent: Math.floor((totalToday/dailyTimeNeededAdjMin)*100),
                 weekTodayPercent: Math.floor((totalWeek/(dailyTimeNeededAdjMin*7))*100),
@@ -185,6 +185,7 @@ export const activity = {
             var friday = 0;
             var saturday = 0;
             var sunday = 0;
+            var thisWeekTotal = 0;
 
             var lastmonday = 0;
             var lasttuesday = 0;
@@ -193,10 +194,12 @@ export const activity = {
             var lastfriday = 0;
             var lastsaturday = 0;
             var lastsunday = 0;
+            var lastWeekTotal = 0;
 
             getters.all.forEach(e => {
                 if (isThisWeek(e.startTimeISO, { weekStartsOn: 1 }))
                 {
+                    thisWeekTotal += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0;
                     if (isMonday(e.startTimeISO)) monday += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0
                     if (isTuesday(e.startTimeISO)) tuesday += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0
                     if (isWednesday(e.startTimeISO)) wednesday += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0
@@ -207,6 +210,7 @@ export const activity = {
                 }
                 if (isLastWeek(e.startTimeISO))
                 {
+                    lastWeekTotal += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0;
                     if (isMonday(e.startTimeISO)) lastmonday += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0
                     if (isTuesday(e.startTimeISO)) lasttuesday += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0
                     if (isWednesday(e.startTimeISO)) lastwednesday += e.totalElapsedMinutes > 0 ? e.totalElapsedMinutes : 0
@@ -222,14 +226,14 @@ export const activity = {
                 labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
                 datasets: [
                   {
-                    label: 'This Week',
-                    backgroundColor: '#f87979',
+                    label: 'This Week (' + getHHMM(thisWeekTotal) + ')',
+                    backgroundColor: '#6200ee',
                     data: [minutesToHours(monday), minutesToHours(tuesday), minutesToHours(wednesday), minutesToHours(thursday), 
                         minutesToHours(friday), minutesToHours(saturday), minutesToHours(sunday)]
                   },
                   {
-                    label: 'Last Week',
-                    backgroundColor: '#5DD50A',
+                    label: 'Last Week (' + getHHMM(lastWeekTotal) + ')',
+                    backgroundColor: '#B4DF96',
                     data: [minutesToHours(lastmonday), minutesToHours(lasttuesday), minutesToHours(lastwednesday), minutesToHours(lastthursday), 
                         minutesToHours(lastfriday), minutesToHours(lastsaturday), minutesToHours(lastsunday)]
                   }
