@@ -12,7 +12,6 @@ function isLastWeek(date){
     var today = Date.now();
     var sow = addDays(startOfWeek(today, { weekStartsOn: 1 }), -7)
     var eow = endOfWeek(sow, { weekStartsOn: 1 });
-    // return {sow: sow, eow:eow, is: isWithinInterval(new Date(2022, 1, 7), {start:sow, end:eow})};
     return isWithinInterval(date, {start:sow, end:eow});
 }
 
@@ -28,9 +27,12 @@ function hoursToMinutes(data){
     const words = String(data).split('.');
     const hours = words[0]*60;
     const m1 = parseInt(words[1]);
-    var multiplier = m1.toString().length == 1 ? .1 : .01;
-    var m2 = Math.floor((((m1*multiplier)/100)*60).toFixed(2) * 100)
-    return getHHMM(hours+m2);
+    if (m1 > 0){
+        var multiplier = m1.toString().length == 1 ? .1 : .01;
+        var m2 = Math.floor((((m1*multiplier)/100)*60).toFixed(2) * 100)
+        return getHHMM(hours+m2);
+    }
+    return getHHMM(hours);
 }
 
 function padTime(data){
@@ -229,13 +231,13 @@ export const activity = {
                     label: 'This Week (' + getHHMM(thisWeekTotal) + ')',
                     backgroundColor: '#6200ee',
                     data: [minutesToHours(monday), minutesToHours(tuesday), minutesToHours(wednesday), minutesToHours(thursday), 
-                        minutesToHours(friday), minutesToHours(saturday), minutesToHours(sunday)]
+                        minutesToHours(friday), minutesToHours(saturday), minutesToHours(sunday),0]
                   },
                   {
                     label: 'Last Week (' + getHHMM(lastWeekTotal) + ')',
                     backgroundColor: '#B4DF96',
                     data: [minutesToHours(lastmonday), minutesToHours(lasttuesday), minutesToHours(lastwednesday), minutesToHours(lastthursday), 
-                        minutesToHours(lastfriday), minutesToHours(lastsaturday), minutesToHours(lastsunday)]
+                        minutesToHours(lastfriday), minutesToHours(lastsaturday), minutesToHours(lastsunday),0]
                   }
                 ]
               }
@@ -294,7 +296,7 @@ export const activity = {
                 labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                 datasets: [
                   {
-                    label: 'This Month',
+                    label: 'Month',
                     backgroundColor: '#6200ee',
                     data: [minutesToHours(jan), minutesToHours(feb), minutesToHours(mar), minutesToHours(apr), 
                         minutesToHours(may), minutesToHours(june), minutesToHours(july),

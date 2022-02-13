@@ -51,6 +51,7 @@ export default {
 <style scoped>
   .container{
     padding-top: 70px;
+    padding-bottom: 100px;
 
   }
   .charts{
